@@ -121,8 +121,6 @@ class MainActivity : AppCompatActivity() {
             setTargetRotation(previewView.display.rotation)
         }.build()
 
-        imagePreview.setSurfaceProvider(previewView.previewSurfaceProvider)
-
         imageAnalysis = ImageAnalysis.Builder().apply {
             setImageQueueDepth(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
         }.build()
@@ -140,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider = cameraProviderFuture.get()
 
+            // The use case is bound to an Android Lifecycle with the following code
             val camera = cameraProvider.bindToLifecycle(
                 this,
                 cameraSelector,
@@ -147,6 +146,9 @@ class MainActivity : AppCompatActivity() {
                 imageAnalysis,
                 imageCapture
             )
+
+            // PreviewView creates a surface provider and is the recommended provider
+            imagePreview.setSurfaceProvider(previewView.createSurfaceProvider(camera.cameraInfo))
 
             cameraControl = camera.cameraControl
             cameraInfo = camera.cameraInfo
