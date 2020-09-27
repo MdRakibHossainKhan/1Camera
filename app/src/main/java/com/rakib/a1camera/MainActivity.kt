@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             // PreviewView creates a surface provider and is the recommended provider
-            imagePreview.setSurfaceProvider(previewView.createSurfaceProvider())
+            imagePreview.setSurfaceProvider(previewView.surfaceProvider)
 
             cameraControl = camera.cameraControl
             cameraInfo = camera.cameraInfo
